@@ -1,4 +1,4 @@
-module omoshiro_go_moji
+module omoshiro_go_moji/backend
 
 go 1.18
 
