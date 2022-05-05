@@ -1,13 +1,13 @@
 package databases
 
 import (
-	"omoshiro_go_moji/backend/models"
+	"omoshiroGoMoji/backend/models"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
-var db_connection *gorm.DB
+var dbConnection *gorm.DB
 
 func Init() {
 	USER := "root"
@@ -16,18 +16,18 @@ func Init() {
 	DBNAME := "omoshiro_go_moji_development"
 	CONNECT := USER + ":" + PASS + "@" + PROTOCOL + "/" + DBNAME + "?parseTime=true"
 	var err error
-	db_connection, err = gorm.Open(mysql.Open(CONNECT), &gorm.Config{})
+	dbConnection, err = gorm.Open(mysql.Open(CONNECT), &gorm.Config{})
 	if err != nil {
 		panic(err.Error())
 	}
-	db_connection.AutoMigrate(&models.User{})
+	dbConnection.AutoMigrate(&models.User{})
 }
 
 func GetDBConnection() *gorm.DB {
-	return db_connection
+	return dbConnection
 }
 
 func Close() {
-	db, _ := db_connection.DB()
+	db, _ := dbConnection.DB()
 	db.Close()
 }

@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"net/http"
-	service "omoshiro_go_moji/backend/services"
+	service "omoshiroGoMoji/backend/services"
 
 	"github.com/gin-gonic/gin"
 )

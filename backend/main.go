@@ -2,8 +2,8 @@ package main
 
 import (
 	"net/http"
-	"omoshiro_go_moji/backend/controllers"
-	"omoshiro_go_moji/backend/databases"
+	"omoshiroGoMoji/backend/controllers"
+	"omoshiroGoMoji/backend/databases"
 
 	"github.com/gin-gonic/gin"
 )
