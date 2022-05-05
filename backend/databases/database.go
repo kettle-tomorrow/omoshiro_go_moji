@@ -20,7 +20,7 @@ func Init() {
 	if err != nil {
 		panic(err.Error())
 	}
-	dbConnection.AutoMigrate(&models.User{})
+	dbConnection.AutoMigrate(&models.User{}, &models.OmoshiroGoMoji{})
 }
 
 func GetDBConnection() *gorm.DB {

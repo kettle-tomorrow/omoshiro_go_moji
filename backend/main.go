@@ -13,19 +13,13 @@ func main() {
 	defer databases.Close()
 	engine := gin.Default()
 	apiV1 := engine.Group("/api/v1")
-	{
-		// omoshiroGoMojiEngine := apiV1.Group("/omoshiro-go-moji")
-		// {
-		// 	omoshiroGoMojiEngine.GET("/list", controller.OmoshiroGoMojiList)
-		// 	omoshiroGoMojiEngine.POST("/add", controller.OmoshiroGoMojiAdd)
-		// 	omoshiroGoMojiEngine.PUT("/update", controller.OmoshiroGoMojiUpdate)
-		// 	omoshiroGoMojiEngine.DELETE("/delete", controller.OmoshiroGoMojiDelete)
-		// }
-		user := apiV1.Group("/users")
-		{
-			user.GET("/list", controllers.UserList)
-		}
-	}
+	omoshiroGoMojiEngine := apiV1.Group("/omoshiro_go_moji")
+	omoshiroGoMojiEngine.GET("/list", controllers.OmoshiroGoMojiList)
+	// 	omoshiroGoMojiEngine.POST("/add", controller.OmoshiroGoMojiAdd)
+	// 	omoshiroGoMojiEngine.PUT("/update", controller.OmoshiroGoMojiUpdate)
+	// 	omoshiroGoMojiEngine.DELETE("/delete", controller.OmoshiroGoMojiDelete)
+	user := apiV1.Group("/user")
+	user.GET("/list", controllers.UserList)
 	engine.GET("/", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
 			"message": "Welcome to おもしろGo文字",

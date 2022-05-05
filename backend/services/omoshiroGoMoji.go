@@ -1,5 +1,10 @@
 package services
 
+import (
+	"omoshiroGoMoji/backend/databases"
+	"omoshiroGoMoji/backend/models"
+)
+
 type OmoshiroGoMojiService struct{}
 
 // func (OmoshiroGoMojiService) SetOmoshiroGoMojiService(omoshiroGoMoji *model.OmoshiroGoMojiService) error {
@@ -10,14 +15,12 @@ type OmoshiroGoMojiService struct{}
 // 	return nil
 // }
 
-// func (OmoshiroGoMojiService) GetOmoshiroGoMojiList() []model.OmoshiroGoMoji {
-// 	tests := make([]model.OmoshiroGoMoji, 0)
-// 	err := DbEngine.Distinct("id", "name").Limit(10, 0).Find(&tests)
-// 	if err != nil {
-// 		panic(err)
-// 	}
-// 	return tests
-// }
+func (OmoshiroGoMojiService) GetOmoshiroGoMojiList() []models.OmoshiroGoMoji {
+	var omoshiroGomojis []models.OmoshiroGoMoji
+	dbConnection := databases.GetDBConnection()
+	dbConnection.Find(&omoshiroGomojis)
+	return omoshiroGomojis
+}
 
 // func (OmoshiroGoMojiService) UpdateOmoshiroGoMoji(newOmoshiroGoMoji *model.OmoshiroGoMoji) error {
 // 	_, err := DbEngine.Id(newOmoshiroGoMoji.Id).Update(newOmoshiroGoMoji)
