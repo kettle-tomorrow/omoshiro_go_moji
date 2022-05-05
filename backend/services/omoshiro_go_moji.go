@@ -1,4 +1,4 @@
-package service
+package services
 
 type OmoshiroGoMojiService struct{}
 
