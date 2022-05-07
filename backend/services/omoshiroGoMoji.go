@@ -9,7 +9,7 @@ type OmoshiroGoMojiService struct{}
 
 func (OmoshiroGoMojiService) CreateOmoshiroGoMojiService(omoshiroGoMoji *models.OmoshiroGoMoji) error {
 	dbConnection := databases.GetDBConnection()
-	dbConnection.Create(&omoshiroGoMoji)
+	dbConnection.Create(omoshiroGoMoji)
 	return nil
 }
 

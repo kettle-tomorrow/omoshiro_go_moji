@@ -22,6 +22,7 @@ func OmoshiroGoMojiCreate(c *gin.Context) {
 	omoshiroGoMojiService.CreateOmoshiroGoMojiService(&omoshiroGoMoji)
 	c.JSON(http.StatusCreated, gin.H{
 		"status": "ok",
+		"data":   omoshiroGoMoji,
 	})
 }
 
