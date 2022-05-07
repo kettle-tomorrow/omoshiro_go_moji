@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"net/http"
+	"omoshiroGoMoji/backend/models"
 	"omoshiroGoMoji/backend/services"
 
 	"github.com/gin-gonic/gin"
@@ -10,23 +11,19 @@ import (
 // "backend/model"
 // "backend/service"
 
-// func OmoshiroGoMojiAdd(c *gin.Context) {
-// 	omoshiroGoMoji := model.OmoshiroGoMoji{}
-// 	err := c.Bind(&omoshiroGoMoji)
-// 	if err != nil {
-// 		c.String(http.StatusBadRequest, "Bad request")
-// 		return
-// 	}
-// 	omoshiroGoMojiService := service.OmoshiroGoMojiService{}
-// 	err = omoshiroGoMojiService.SetOmoshiroGoMoji(&omoshiroGoMoji)
-// 	if err != nil {
-// 		c.String(http.StatusInternalServerError, "Server Error")
-// 		return
-// 	}
-// 	c.JSON(http.StatusCreated, gin.H{
-// 		"status": "ok",
-// 	})
-// }
+func OmoshiroGoMojiCreate(c *gin.Context) {
+	omoshiroGoMoji := models.OmoshiroGoMoji{}
+	err := c.Bind(&omoshiroGoMoji)
+	if err != nil {
+		c.String(http.StatusBadRequest, "Bad request")
+		return
+	}
+	omoshiroGoMojiService := services.OmoshiroGoMojiService{}
+	omoshiroGoMojiService.CreateOmoshiroGoMojiService(&omoshiroGoMoji)
+	c.JSON(http.StatusCreated, gin.H{
+		"status": "ok",
+	})
+}
 
 func OmoshiroGoMojiList(c *gin.Context) {
 	omoshiroGoMojiService := services.OmoshiroGoMojiService{}

@@ -7,13 +7,11 @@ import (
 
 type OmoshiroGoMojiService struct{}
 
-// func (OmoshiroGoMojiService) SetOmoshiroGoMojiService(omoshiroGoMoji *model.OmoshiroGoMojiService) error {
-// 	_, err := DbEngine.Insert(omoshiroGoMoji)
-// 	if err != nil {
-// 		return err
-// 	}
-// 	return nil
-// }
+func (OmoshiroGoMojiService) CreateOmoshiroGoMojiService(omoshiroGoMoji *models.OmoshiroGoMoji) error {
+	dbConnection := databases.GetDBConnection()
+	dbConnection.Create(&omoshiroGoMoji)
+	return nil
+}
 
 func (OmoshiroGoMojiService) GetOmoshiroGoMojiList() []models.OmoshiroGoMoji {
 	var omoshiroGomojis []models.OmoshiroGoMoji
