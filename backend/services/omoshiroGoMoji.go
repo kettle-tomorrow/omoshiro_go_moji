@@ -33,11 +33,8 @@ func (OmoshiroGoMojiService) UpdateOmoshiroGoMoji(omoshiroGoMoji *models.Omoshir
 	return nil
 }
 
-// func (OmoshiroGoMojiService) DeleteOmoshiroGoMoji(id int) error {
-// 	omoshiroGoMoji := new(model.OmoshiroGoMoji)
-// 	_, err := DbEngine.Id(id).Delete(omoshiroGoMoji)
-// 	if err != nil {
-// 		return err
-// 	}
-// 	return nil
-// }
+func (OmoshiroGoMojiService) DeleteOmoshiroGoMoji(id string) error {
+	dbConnection := databases.GetDBConnection()
+	dbConnection.Delete(models.OmoshiroGoMoji{}, id)
+	return nil
+}
