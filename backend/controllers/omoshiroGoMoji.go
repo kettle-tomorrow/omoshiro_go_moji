@@ -41,19 +41,20 @@ func OmoshiroGoMojiShow(c *gin.Context) {
 	})
 }
 
-// func OmoshiroGoMojiUpdate(c *gin.Context) {
-// 	omoshiroGoMoji := models.OmoshiroGoMoji{}
-// 	err := c.Bind(&omoshiroGoMoji)
-// 	if err != nil {
-// 		c.String(http.StatusBadRequest, "Bad request")
-// 		return
-// 	}
-// 	omoshiroGoMojiService := services.OmoshiroGoMojiService{}
-// 	omoshiroGoMojiService.UpdateOmoshiroGoMoji(&omoshiroGoMoji)
-// 	c.JSON(http.StatusCreated, gin.H{
-// 		"status": "ok",
-// 	})
-// }
+func OmoshiroGoMojiUpdate(c *gin.Context) {
+	omoshiroGoMojiService := services.OmoshiroGoMojiService{}
+	omoshiroGoMoji := omoshiroGoMojiService.GetOmoshiroGoMoji(c.Param("id"))
+	err := c.Bind(&omoshiroGoMoji)
+	if err != nil {
+		c.String(http.StatusBadRequest, "Bad request")
+		return
+	}
+	omoshiroGoMojiService.UpdateOmoshiroGoMoji(&omoshiroGoMoji)
+	c.JSON(http.StatusCreated, gin.H{
+		"status": "ok",
+		"data":   omoshiroGoMoji,
+	})
+}
 
 // func OmoshiroGoMojiDelete(c *gin.Context) {
 // 	id := c.PostForm("id")

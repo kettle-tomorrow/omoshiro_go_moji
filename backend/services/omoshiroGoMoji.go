@@ -27,11 +27,11 @@ func (OmoshiroGoMojiService) GetOmoshiroGoMoji(id string) models.OmoshiroGoMoji 
 	return omoshiroGoMoji
 }
 
-// func (OmoshiroGoMojiService) UpdateOmoshiroGoMoji(omoshiroGoMoji *models.OmoshiroGoMoji) error {
-// 	dbConnection := databases.GetDBConnection()
-// 	dbConnection.Save(omoshiroGoMoji)
-// 	return nil
-// }
+func (OmoshiroGoMojiService) UpdateOmoshiroGoMoji(omoshiroGoMoji *models.OmoshiroGoMoji) error {
+	dbConnection := databases.GetDBConnection()
+	dbConnection.Save(omoshiroGoMoji)
+	return nil
+}
 
 // func (OmoshiroGoMojiService) DeleteOmoshiroGoMoji(id int) error {
 // 	omoshiroGoMoji := new(model.OmoshiroGoMoji)
