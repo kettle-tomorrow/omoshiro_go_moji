@@ -20,11 +20,16 @@ func (OmoshiroGoMojiService) GetOmoshiroGoMojiList() []models.OmoshiroGoMoji {
 	return omoshiroGomojis
 }
 
-// func (OmoshiroGoMojiService) UpdateOmoshiroGoMoji(newOmoshiroGoMoji *model.OmoshiroGoMoji) error {
-// 	_, err := DbEngine.Id(newOmoshiroGoMoji.Id).Update(newOmoshiroGoMoji)
-// 	if err != nil {
-// 		return err
-// 	}
+func (OmoshiroGoMojiService) GetOmoshiroGoMoji(id string) models.OmoshiroGoMoji {
+	var omoshiroGoMoji models.OmoshiroGoMoji
+	dbConnection := databases.GetDBConnection()
+	dbConnection.First(&omoshiroGoMoji, id)
+	return omoshiroGoMoji
+}
+
+// func (OmoshiroGoMojiService) UpdateOmoshiroGoMoji(omoshiroGoMoji *models.OmoshiroGoMoji) error {
+// 	dbConnection := databases.GetDBConnection()
+// 	dbConnection.Save(omoshiroGoMoji)
 // 	return nil
 // }
 

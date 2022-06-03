@@ -8,9 +8,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// "backend/model"
-// "backend/service"
-
 func OmoshiroGoMojiCreate(c *gin.Context) {
 	omoshiroGoMoji := models.OmoshiroGoMoji{}
 	err := c.Bind(&omoshiroGoMoji)
@@ -35,23 +32,29 @@ func OmoshiroGoMojiList(c *gin.Context) {
 	})
 }
 
+func OmoshiroGoMojiShow(c *gin.Context) {
+	omoshiroGomojiService := services.OmoshiroGoMojiService{}
+	omoshiroGoMoji := omoshiroGomojiService.GetOmoshiroGoMoji(c.Param("id"))
+	c.JSONP(http.StatusOK, gin.H{
+		"message": "ok",
+		"data":    omoshiroGoMoji,
+	})
+}
+
 // func OmoshiroGoMojiUpdate(c *gin.Context) {
-// 	omoshiroGoMoji := model.OmoshiroGoMoji{}
+// 	omoshiroGoMoji := models.OmoshiroGoMoji{}
 // 	err := c.Bind(&omoshiroGoMoji)
 // 	if err != nil {
 // 		c.String(http.StatusBadRequest, "Bad request")
 // 		return
 // 	}
-// 	omoshiroGoMojiService := service.OmoshiroGoMojiService{}
-// 	err = omoshiroGoMojiService.UpdateOmoshiroGoMoji(&omoshiroGoMoji)
-// 	if err != nil {
-// 		c.String(http.StatusInternalServerError, "Server Error")
-// 		return
-// 	}
+// 	omoshiroGoMojiService := services.OmoshiroGoMojiService{}
+// 	omoshiroGoMojiService.UpdateOmoshiroGoMoji(&omoshiroGoMoji)
 // 	c.JSON(http.StatusCreated, gin.H{
 // 		"status": "ok",
 // 	})
 // }
+
 // func OmoshiroGoMojiDelete(c *gin.Context) {
 // 	id := c.PostForm("id")
 // 	intId, err := strconv.ParseInt(id, 10, 0)
