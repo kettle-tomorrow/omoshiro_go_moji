@@ -1,37 +1,17 @@
 <template>
   <div class="omoshiro-go-moji">
     <header>
-      <h1 class="title">おもしろ5文字</h1>
+      <h1 class="title">5文字</h1>
       <hr class="title-divider" />
     </header>
     <main class="cards">
-      <div class="card">
+      <div
+        class="card"
+        v-for="omoshiroGoMoji in state.omoshiroGoMojiList"
+        :key="omoshiroGoMoji.uuid"
+      >
         <div class="card-content">
-          <p class="card-text">どんとこい</p>
-          <router-link to="#">編集</router-link> |
-          <router-link to="#">削除</router-link>
-        </div>
-        <hr class="card-divider" />
-      </div>
-      <div class="card">
-        <div class="card-content">
-          <p class="card-text">どんとこい</p>
-          <router-link to="#">編集</router-link> |
-          <router-link to="#">削除</router-link>
-        </div>
-        <hr class="card-divider" />
-      </div>
-      <div class="card">
-        <div class="card-content">
-          <p class="card-text">どんとこい</p>
-          <router-link to="#">編集</router-link> |
-          <router-link to="#">削除</router-link>
-        </div>
-        <hr class="card-divider" />
-      </div>
-      <div class="card">
-        <div class="card-content">
-          <p class="card-text">どんとこい</p>
+          <p class="card-text">{{ omoshiroGoMoji.name }}</p>
           <router-link to="#">編集</router-link> |
           <router-link to="#">削除</router-link>
         </div>
@@ -40,6 +20,41 @@
     </main>
   </div>
 </template>
+
+<script lang="ts">
+import { defineComponent, reactive } from "vue";
+import axios from "axios";
+
+const baseURL = "http://localhost:3000/";
+
+interface OmoshiroGoMoji {
+  name: string;
+}
+
+const defaultOmoshiroGoMojiList: OmoshiroGoMoji[] = [];
+
+export default defineComponent({
+  name: "OmoshiroGoMoji",
+  setup() {
+    const state = reactive({
+      title: "",
+      omoshiroGoMojiList: defaultOmoshiroGoMojiList,
+    });
+
+    const getOmoshiroGoMojiList = async () => {
+      const res = await axios.get(`${baseURL}api/v1/omoshiro_go_moji/list`);
+      const omoshiroGoMojiList: OmoshiroGoMoji[] = res.data.data;
+      state.omoshiroGoMojiList = omoshiroGoMojiList;
+    };
+
+    getOmoshiroGoMojiList();
+
+    return {
+      state,
+    };
+  },
+});
+</script>
 
 <style lang="scss">
 .title {

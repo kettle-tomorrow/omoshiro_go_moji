@@ -5,6 +5,7 @@ import (
 	"omoshiroGoMoji/backend/controllers"
 	"omoshiroGoMoji/backend/databases"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -12,6 +13,14 @@ func main() {
 	databases.Init()
 	defer databases.Close()
 	engine := gin.Default()
+
+	// CORS
+	engine.Use(cors.New(cors.Config{
+		AllowOrigins: []string{"http://localhost:8080"},
+		AllowMethods: []string{"GET", "POST", "DELETE", "OPTIONS"},
+		AllowHeaders: []string{"*"},
+	}))
+
 	apiV1 := engine.Group("/api/v1")
 	omoshiroGoMojiEngine := apiV1.Group("/omoshiro_go_moji")
 	omoshiroGoMojiEngine.GET("/list", controllers.OmoshiroGoMojiList)
