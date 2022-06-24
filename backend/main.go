@@ -25,7 +25,7 @@ func main() {
 	omoshiroGoMojiEngine := apiV1.Group("/omoshiro_go_moji")
 	omoshiroGoMojiEngine.GET("/list", controllers.OmoshiroGoMojiList)
 	omoshiroGoMojiEngine.GET("/:id", controllers.OmoshiroGoMojiShow)
-	omoshiroGoMojiEngine.POST("/", controllers.OmoshiroGoMojiCreate)
+	omoshiroGoMojiEngine.POST("", controllers.OmoshiroGoMojiCreate)
 	omoshiroGoMojiEngine.PATCH("/:id", controllers.OmoshiroGoMojiUpdate)
 	omoshiroGoMojiEngine.DELETE("/:id", controllers.OmoshiroGoMojiDelete)
 	user := apiV1.Group("/user")

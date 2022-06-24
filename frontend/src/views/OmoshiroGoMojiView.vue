@@ -37,7 +37,6 @@ export default defineComponent({
   name: "OmoshiroGoMoji",
   setup() {
     const state = reactive({
-      title: "",
       omoshiroGoMojiList: defaultOmoshiroGoMojiList,
     });
 
