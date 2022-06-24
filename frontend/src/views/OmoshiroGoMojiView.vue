@@ -12,7 +12,14 @@
       >
         <div class="card-content">
           <p class="card-text">{{ omoshiroGoMoji.name }}</p>
-          <router-link to="#">編集</router-link> |
+          <router-link
+            :to="{
+              name: 'omoshiro_go_moji_update_form',
+              params: { id: omoshiroGoMoji.id },
+            }"
+          >
+            編集
+          </router-link>
           <a @click="deleteOmoshiroGomoji(omoshiroGoMoji.id)">削除</a>
         </div>
         <hr class="card-divider" />
@@ -29,6 +36,7 @@ const baseURL = "http://localhost:3000/";
 
 interface OmoshiroGoMoji {
   name: string;
+  id: number;
 }
 
 const defaultOmoshiroGoMojiList: OmoshiroGoMoji[] = [];

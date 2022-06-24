@@ -17,7 +17,7 @@ func main() {
 	// CORS
 	engine.Use(cors.New(cors.Config{
 		AllowOrigins: []string{"http://localhost:8080"},
-		AllowMethods: []string{"GET", "POST", "DELETE", "OPTIONS"},
+		AllowMethods: []string{"GET", "POST", "DELETE", "PATCH", "PUT", "OPTIONS"},
 		AllowHeaders: []string{"*"},
 	}))
 
