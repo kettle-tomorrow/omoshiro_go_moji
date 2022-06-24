@@ -13,7 +13,7 @@
         <div class="card-content">
           <p class="card-text">{{ omoshiroGoMoji.name }}</p>
           <router-link to="#">編集</router-link> |
-          <router-link to="#">削除</router-link>
+          <a @click="deleteOmoshiroGomoji(omoshiroGoMoji.id)">削除</a>
         </div>
         <hr class="card-divider" />
       </div>
@@ -48,8 +48,16 @@ export default defineComponent({
 
     getOmoshiroGoMojiList();
 
+    const deleteOmoshiroGomoji = async (id: number) => {
+      await axios.delete(`${baseURL}api/v1/omoshiro_go_moji/${id}`);
+      const res = await axios.get(`${baseURL}api/v1/omoshiro_go_moji/list`);
+      const omoshiroGoMojiList: OmoshiroGoMoji[] = res.data.data;
+      state.omoshiroGoMojiList = omoshiroGoMojiList;
+    };
+
     return {
       state,
+      deleteOmoshiroGomoji,
     };
   },
 });
