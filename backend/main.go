@@ -36,6 +36,7 @@ func main() {
 	omoshiroGoMojiRouter := apiV1.Group("/omoshiro_go_moji")
 	omoshiroGoMojiRouter.GET("/list", controllers.OmoshiroGoMojiList)
 	omoshiroGoMojiRouter.GET("/:id", controllers.OmoshiroGoMojiShow)
+	omoshiroGoMojiRouter.Use(loginCheckMiddleware())
 	omoshiroGoMojiRouter.POST("", controllers.OmoshiroGoMojiCreate)
 	omoshiroGoMojiRouter.PATCH("/:id", controllers.OmoshiroGoMojiUpdate)
 	omoshiroGoMojiRouter.DELETE("/:id", controllers.OmoshiroGoMojiDelete)
@@ -66,6 +67,7 @@ func loginCheckMiddleware() gin.HandlerFunc {
 				c.String(http.StatusUnauthorized, "unauthorized2")
 				c.Abort()
 			} else {
+				c.Set("currentUserID", loginInfo.ID)
 				c.Next()
 			}
 		}

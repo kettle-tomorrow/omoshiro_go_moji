@@ -9,7 +9,7 @@ import (
 )
 
 func OmoshiroGoMojiCreate(c *gin.Context) {
-	omoshiroGoMoji := models.OmoshiroGoMoji{}
+	omoshiroGoMoji := models.OmoshiroGoMoji{UserID: c.GetUint("currentUserID")}
 	err := c.Bind(&omoshiroGoMoji)
 	if err != nil {
 		c.String(http.StatusBadRequest, "Bad request")
@@ -49,6 +49,10 @@ func OmoshiroGoMojiUpdate(c *gin.Context) {
 	omoshiroGoMojiService := services.OmoshiroGoMojiService{}
 	omoshiroGoMoji := omoshiroGoMojiService.GetOmoshiroGoMoji(c.Param("id"))
 	err := c.Bind(&omoshiroGoMoji)
+	if omoshiroGoMoji.UserID != c.GetUint("currentUserID") {
+		c.String(http.StatusNotFound, "not found")
+		return
+	}
 	if err != nil {
 		c.String(http.StatusBadRequest, "Bad request")
 		return
@@ -62,6 +66,11 @@ func OmoshiroGoMojiUpdate(c *gin.Context) {
 
 func OmoshiroGoMojiDelete(c *gin.Context) {
 	omoshiroGoMojiService := services.OmoshiroGoMojiService{}
+	omoshiroGoMoji := omoshiroGoMojiService.GetOmoshiroGoMoji(c.Param("id"))
+	if omoshiroGoMoji.UserID != c.GetUint("currentUserID") {
+		c.String(http.StatusNotFound, "not found")
+		return
+	}
 	omoshiroGoMojiService.DeleteOmoshiroGoMoji(c.Param("id"))
 	c.JSON(http.StatusCreated, gin.H{
 		"status": "ok",
