@@ -3,6 +3,7 @@ import HomeView from "../views/HomeView.vue";
 import OmoshiroGoMojiView from "../views/OmoshiroGoMojiView.vue";
 import OmoshiroGoMojiCreateFormView from "../views/OmoshiroGoMojiCreateFormView.vue";
 import OmoshiroGoMojiUpdateFormView from "../views/OmoshiroGoMojiUpdateFormView.vue";
+import LoginFormView from "../views/LoginFormView.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -14,6 +15,11 @@ const routes: Array<RouteRecordRaw> = [
     path: "/",
     name: "omoshiro_go_moji",
     component: OmoshiroGoMojiView,
+  },
+  {
+    path: "/login",
+    name: "login_form",
+    component: LoginFormView,
   },
   {
     path: "/omoshiro_go_moji/new",

@@ -30,7 +30,7 @@ import { defineComponent, reactive } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import axios from "axios";
 
-const baseURL = "http://localhost:3000/";
+const baseURL = "http://localhost:8080/";
 
 interface OmoshiroGoMoji {
   name: string;
@@ -42,7 +42,7 @@ export default defineComponent({
   setup() {
     const state = reactive({
       name: "",
-      id: undefined,
+      id: 0,
     });
     const router = useRouter();
     const route = useRoute();

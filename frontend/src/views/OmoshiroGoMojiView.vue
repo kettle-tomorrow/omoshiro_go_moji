@@ -32,7 +32,7 @@
 import { defineComponent, reactive } from "vue";
 import axios from "axios";
 
-const baseURL = "http://localhost:3000/";
+const baseURL = "http://localhost:8080/";
 
 interface OmoshiroGoMoji {
   name: string;

@@ -1,24 +1,24 @@
 <template>
-  <div class="omoshiro-go-moji-create-form">
+  <div class="login-form">
     <div>
-      <h1 class="title">5文字</h1>
+      <h1 class="title">ログイン</h1>
       <hr class="title-divider" />
     </div>
-    <div class="omoshiro-go-moji-form">
+    <div class="login-form">
       <input
-        v-model="state.name"
+        v-model="state.email"
         type="text"
-        class="omoshiro-go-moji-input-name"
+        class="login-input-text"
         required
-        minlength="5"
-        maxlength="5"
-        placeholder="とちくるう"
+        placeholder="test@example.com"
       />
-      <button
-        @click="createOmoshiroGoMoji"
-        class="omoshiro-go-moji-button"
-        type="button"
-      >
+      <input
+        v-model="state.password"
+        type="password"
+        class="login-input-text"
+        required
+      />
+      <button @click="postLogin" class="login-button" type="button">
         送信
       </button>
     </div>
@@ -33,23 +33,25 @@ import axios from "axios";
 const baseURL = "http://localhost:8080/";
 
 export default defineComponent({
-  name: "OmoshiroGoMojiCreateForm",
+  name: "LoginForm",
   setup() {
     const state = reactive({
-      name: "",
+      email: "",
+      password: "",
     });
     const router = useRouter();
 
-    const createOmoshiroGoMoji = async () => {
-      await axios.post(`${baseURL}api/v1/omoshiro_go_moji`, {
-        name: state.name,
+    const postLogin = async () => {
+      await axios.post(`${baseURL}api/v1/login`, {
+        email: state.email,
+        password: state.password,
       });
       router.push("/");
     };
 
     return {
       state,
-      createOmoshiroGoMoji,
+      postLogin,
     };
   },
 });
@@ -62,17 +64,17 @@ export default defineComponent({
 hr.title-divider {
   border-top: 2px solid #bbb;
 }
-.omoshiro-go-moji-form {
+.login-form {
   margin: 100px;
 }
-.omoshiro-go-moji-input-name {
+.login-input-text {
   margin: 10px;
   width: 200px;
   height: 50px;
   font-size: 150%;
   border: 2px solid #bbb;
 }
-.omoshiro-go-moji-button {
+.login-button {
   margin: 10px;
   width: 100px;
   height: 56px;
