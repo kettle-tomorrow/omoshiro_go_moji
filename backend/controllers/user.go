@@ -2,14 +2,14 @@ package controllers
 
 import (
 	"net/http"
-	service "omoshiroGoMoji/backend/services"
+	"omoshiroGoMoji/backend/models"
 
 	"github.com/gin-gonic/gin"
 )
 
 func UserList(c *gin.Context) {
-	userService := service.UserService{}
-	userList := userService.GetUserList()
+	user := models.User{}
+	userList := user.GetUserList()
 	c.JSONP(http.StatusOK, gin.H{
 		"message": "ok",
 		"data":    userList,
