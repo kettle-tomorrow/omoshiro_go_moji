@@ -33,6 +33,7 @@ func main() {
 	apiV1 := router.Group("/api/v1")
 	apiV1.POST("/login", controllers.Login)
 	apiV1.POST("/account", controllers.AccountCreate)
+
 	omoshiroGoMojiRouter := apiV1.Group("/omoshiro_go_moji")
 	omoshiroGoMojiRouter.GET("/list", controllers.OmoshiroGoMojiList)
 	omoshiroGoMojiRouter.GET("/:id", controllers.OmoshiroGoMojiShow)
@@ -40,9 +41,11 @@ func main() {
 	omoshiroGoMojiRouter.POST("", controllers.OmoshiroGoMojiCreate)
 	omoshiroGoMojiRouter.PATCH("/:id", controllers.OmoshiroGoMojiUpdate)
 	omoshiroGoMojiRouter.DELETE("/:id", controllers.OmoshiroGoMojiDelete)
+
 	user := apiV1.Group("/user")
 	user.Use(loginCheckMiddleware())
 	user.GET("/list", controllers.UserList)
+
 	router.GET("/", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
 			"message": "Welcome to おもしろGo文字",
@@ -55,21 +58,21 @@ func loginCheckMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		session := sessions.Default(c)
 		// Json文字列がinterdace型で格納されておりdproxyのライブラリを使用して値を取り出す
-		loginUserJson, err := dproxy.New(session.Get("loginUser")).String()
+		loginUserJson, getLoginUserErr := dproxy.New(session.Get("loginUser")).String()
 
-		if err != nil {
+		if getLoginUserErr != nil {
 			c.String(http.StatusUnauthorized, "unauthorized1")
 			c.Abort()
-		} else {
-			var loginInfo models.Account
-			err := json.Unmarshal([]byte(loginUserJson), &loginInfo)
-			if err != nil {
-				c.String(http.StatusUnauthorized, "unauthorized2")
-				c.Abort()
-			} else {
-				c.Set("currentUserID", loginInfo.ID)
-				c.Next()
-			}
 		}
+
+		var loginInfo models.Account
+		jsonUnmarshalErr := json.Unmarshal([]byte(loginUserJson), &loginInfo)
+		if jsonUnmarshalErr != nil {
+			c.String(http.StatusUnauthorized, "unauthorized2")
+			c.Abort()
+		}
+
+		c.Set("currentUserID", loginInfo.ID)
+		c.Next()
 	}
 }
