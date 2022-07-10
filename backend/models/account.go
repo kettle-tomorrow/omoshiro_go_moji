@@ -1,7 +1,10 @@
 package models
 
 import (
+	"omoshiroGoMoji/backend/databases"
 	"time"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 type Account struct {
@@ -10,4 +13,19 @@ type Account struct {
 	Password  string    `gorm:"not null" json:"password" form:"password" binding:"required,max=100"`
 	CreatedAt time.Time `gorm:"not null" json:"created_at"`
 	UpdatedAt time.Time `gorm:"not null" json:"updated_at"`
+}
+
+func (Account) GetAccountByEmail(email string) Account {
+	var account Account
+	dbConnection := databases.GetDBConnection()
+	dbConnection.Where("email = ?", email).First(&account)
+	return account
+}
+
+func (Account) CreateAccount(account *Account) error {
+	hash, _ := bcrypt.GenerateFromPassword([]byte(account.Password), bcrypt.DefaultCost)
+	account.Password = string(hash)
+	dbConnection := databases.GetDBConnection()
+	dbConnection.Create(account)
+	return nil
 }

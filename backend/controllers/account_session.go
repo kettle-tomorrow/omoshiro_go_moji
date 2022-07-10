@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"net/http"
 	"omoshiroGoMoji/backend/models"
-	"omoshiroGoMoji/backend/services"
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
@@ -17,8 +16,8 @@ func Login(c *gin.Context) {
 	if err != nil {
 		c.String(http.StatusBadRequest, "login failed1")
 	} else {
-		accountService := services.AccountService{}
-		account := accountService.GetAccountByEmail(requestAccount.Email)
+		account := models.Account{}
+		account = account.GetAccountByEmail(requestAccount.Email)
 
 		err = bcrypt.CompareHashAndPassword([]byte(account.Password), []byte(requestAccount.Password))
 		if err != nil {

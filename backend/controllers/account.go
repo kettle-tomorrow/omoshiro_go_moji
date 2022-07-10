@@ -3,7 +3,6 @@ package controllers
 import (
 	"net/http"
 	"omoshiroGoMoji/backend/models"
-	"omoshiroGoMoji/backend/services"
 
 	"github.com/gin-gonic/gin"
 )
@@ -15,8 +14,7 @@ func AccountCreate(c *gin.Context) {
 		c.String(http.StatusBadRequest, "Bad request")
 		return
 	}
-	accountService := services.AccountService{}
-	accountService.CreateAccount(&account)
+	account.CreateAccount(&account)
 	c.JSON(http.StatusCreated, gin.H{
 		"status": "ok",
 		"data":   account,
