@@ -3,7 +3,6 @@ package controllers
 import (
 	"net/http"
 	"omoshiroGoMoji/backend/models"
-	"omoshiroGoMoji/backend/services"
 
 	"github.com/gin-gonic/gin"
 )
@@ -15,8 +14,7 @@ func OmoshiroGoMojiCreate(c *gin.Context) {
 		c.String(http.StatusBadRequest, "Bad request")
 		return
 	}
-	omoshiroGoMojiService := services.OmoshiroGoMojiService{}
-	omoshiroGoMojiService.CreateOmoshiroGoMojiService(&omoshiroGoMoji)
+	omoshiroGoMoji.CreateOmoshiroGoMoji(&omoshiroGoMoji)
 	c.JSON(http.StatusCreated, gin.H{
 		"status": "ok",
 		"data":   omoshiroGoMoji,
@@ -24,17 +22,17 @@ func OmoshiroGoMojiCreate(c *gin.Context) {
 }
 
 func OmoshiroGoMojiList(c *gin.Context) {
-	omoshiroGoMojiService := services.OmoshiroGoMojiService{}
-	omoshiroGoMojiLists := omoshiroGoMojiService.GetOmoshiroGoMojiList()
+	omoshiroGoMoji := models.OmoshiroGoMoji{}
+	omoshiroGoMojiList := omoshiroGoMoji.GetOmoshiroGoMojiList()
 	c.JSONP(http.StatusOK, gin.H{
 		"message": "ok",
-		"data":    omoshiroGoMojiLists,
+		"data":    omoshiroGoMojiList,
 	})
 }
 
 func OmoshiroGoMojiShow(c *gin.Context) {
-	omoshiroGomojiService := services.OmoshiroGoMojiService{}
-	omoshiroGoMoji := omoshiroGomojiService.GetOmoshiroGoMoji(c.Param("id"))
+	omoshiroGomoji := models.OmoshiroGoMoji{}
+	omoshiroGoMoji := omoshiroGomoji.GetOmoshiroGoMoji(c.Param("id"))
 	if omoshiroGoMoji.ID == 0 {
 		c.String(http.StatusNotFound, "not found")
 		return
@@ -46,8 +44,8 @@ func OmoshiroGoMojiShow(c *gin.Context) {
 }
 
 func OmoshiroGoMojiUpdate(c *gin.Context) {
-	omoshiroGoMojiService := services.OmoshiroGoMojiService{}
-	omoshiroGoMoji := omoshiroGoMojiService.GetOmoshiroGoMoji(c.Param("id"))
+	omoshiroGoMoji := models.OmoshiroGoMoji{}
+	omoshiroGoMoji = omoshiroGoMoji.GetOmoshiroGoMoji(c.Param("id"))
 	err := c.Bind(&omoshiroGoMoji)
 	if omoshiroGoMoji.UserID != c.GetUint("currentUserID") {
 		c.String(http.StatusNotFound, "not found")
@@ -57,7 +55,7 @@ func OmoshiroGoMojiUpdate(c *gin.Context) {
 		c.String(http.StatusBadRequest, "Bad request")
 		return
 	}
-	omoshiroGoMojiService.UpdateOmoshiroGoMoji(&omoshiroGoMoji)
+	omoshiroGoMoji.UpdateOmoshiroGoMoji(&omoshiroGoMoji)
 	c.JSON(http.StatusCreated, gin.H{
 		"status": "ok",
 		"data":   omoshiroGoMoji,
@@ -65,13 +63,13 @@ func OmoshiroGoMojiUpdate(c *gin.Context) {
 }
 
 func OmoshiroGoMojiDelete(c *gin.Context) {
-	omoshiroGoMojiService := services.OmoshiroGoMojiService{}
-	omoshiroGoMoji := omoshiroGoMojiService.GetOmoshiroGoMoji(c.Param("id"))
+	omoshiroGoMoji := models.OmoshiroGoMoji{}
+	omoshiroGoMoji = omoshiroGoMoji.GetOmoshiroGoMoji(c.Param("id"))
 	if omoshiroGoMoji.UserID != c.GetUint("currentUserID") {
 		c.String(http.StatusNotFound, "not found")
 		return
 	}
-	omoshiroGoMojiService.DeleteOmoshiroGoMoji(c.Param("id"))
+	omoshiroGoMoji.DeleteOmoshiroGoMoji(c.Param("id"))
 	c.JSON(http.StatusCreated, gin.H{
 		"status": "ok",
 	})
