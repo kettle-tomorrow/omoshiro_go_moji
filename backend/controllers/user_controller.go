@@ -7,7 +7,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func UserList(c *gin.Context) {
+type UserController struct{}
+
+func (UserController) Index(c *gin.Context) {
 	user := models.User{}
 	userList := user.GetUserList()
 	c.JSONP(http.StatusOK, gin.H{

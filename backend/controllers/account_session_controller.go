@@ -10,7 +10,9 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func Login(c *gin.Context) {
+type AccountSessionController struct{}
+
+func (AccountSessionController) Create(c *gin.Context) {
 	requestAccount := models.Account{}
 	bindErr := c.Bind(&requestAccount)
 	if bindErr != nil {

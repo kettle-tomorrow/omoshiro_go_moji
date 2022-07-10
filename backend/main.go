@@ -31,20 +31,26 @@ func main() {
 	router.Use(sessions.Sessions("mysession", store))
 
 	apiV1 := router.Group("/api/v1")
-	apiV1.POST("/login", controllers.Login)
-	apiV1.POST("/account", controllers.AccountCreate)
 
+	accountSessionController := controllers.AccountSessionController{}
+	apiV1.POST("/login", accountSessionController.Create)
+
+	accountController := controllers.AccountController{}
+	apiV1.POST("/account", accountController.Create)
+
+	omoshiroGoMojiController := controllers.OmoshiroGoMojiController{}
 	omoshiroGoMojiRouter := apiV1.Group("/omoshiro_go_moji")
-	omoshiroGoMojiRouter.GET("/list", controllers.OmoshiroGoMojiList)
-	omoshiroGoMojiRouter.GET("/:id", controllers.OmoshiroGoMojiShow)
+	omoshiroGoMojiRouter.GET("/list", omoshiroGoMojiController.Index)
+	omoshiroGoMojiRouter.GET("/:id", omoshiroGoMojiController.Show)
 	omoshiroGoMojiRouter.Use(loginCheckMiddleware())
-	omoshiroGoMojiRouter.POST("", controllers.OmoshiroGoMojiCreate)
-	omoshiroGoMojiRouter.PATCH("/:id", controllers.OmoshiroGoMojiUpdate)
-	omoshiroGoMojiRouter.DELETE("/:id", controllers.OmoshiroGoMojiDelete)
+	omoshiroGoMojiRouter.POST("", omoshiroGoMojiController.Create)
+	omoshiroGoMojiRouter.PATCH("/:id", omoshiroGoMojiController.Update)
+	omoshiroGoMojiRouter.DELETE("/:id", omoshiroGoMojiController.Delete)
 
+	userController := controllers.UserController{}
 	user := apiV1.Group("/user")
 	user.Use(loginCheckMiddleware())
-	user.GET("/list", controllers.UserList)
+	user.GET("/list", userController.Index)
 
 	router.GET("/", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{

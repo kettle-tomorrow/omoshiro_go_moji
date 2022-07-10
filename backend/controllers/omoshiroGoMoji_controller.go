@@ -7,7 +7,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func OmoshiroGoMojiCreate(c *gin.Context) {
+type OmoshiroGoMojiController struct{}
+
+func (OmoshiroGoMojiController) Create(c *gin.Context) {
 	omoshiroGoMoji := models.OmoshiroGoMoji{UserID: c.GetUint("currentUserID")}
 	err := c.Bind(&omoshiroGoMoji)
 	if err != nil {
@@ -21,7 +23,7 @@ func OmoshiroGoMojiCreate(c *gin.Context) {
 	})
 }
 
-func OmoshiroGoMojiList(c *gin.Context) {
+func (OmoshiroGoMojiController) Index(c *gin.Context) {
 	omoshiroGoMoji := models.OmoshiroGoMoji{}
 	omoshiroGoMojiList := omoshiroGoMoji.GetOmoshiroGoMojiList()
 	c.JSONP(http.StatusOK, gin.H{
@@ -30,7 +32,7 @@ func OmoshiroGoMojiList(c *gin.Context) {
 	})
 }
 
-func OmoshiroGoMojiShow(c *gin.Context) {
+func (OmoshiroGoMojiController) Show(c *gin.Context) {
 	omoshiroGomoji := models.OmoshiroGoMoji{}
 	omoshiroGoMoji := omoshiroGomoji.GetOmoshiroGoMoji(c.Param("id"))
 	if omoshiroGoMoji.ID == 0 {
@@ -43,7 +45,7 @@ func OmoshiroGoMojiShow(c *gin.Context) {
 	})
 }
 
-func OmoshiroGoMojiUpdate(c *gin.Context) {
+func (OmoshiroGoMojiController) Update(c *gin.Context) {
 	omoshiroGoMoji := models.OmoshiroGoMoji{}
 	omoshiroGoMoji = omoshiroGoMoji.GetOmoshiroGoMoji(c.Param("id"))
 	err := c.Bind(&omoshiroGoMoji)
@@ -62,7 +64,7 @@ func OmoshiroGoMojiUpdate(c *gin.Context) {
 	})
 }
 
-func OmoshiroGoMojiDelete(c *gin.Context) {
+func (OmoshiroGoMojiController) Delete(c *gin.Context) {
 	omoshiroGoMoji := models.OmoshiroGoMoji{}
 	omoshiroGoMoji = omoshiroGoMoji.GetOmoshiroGoMoji(c.Param("id"))
 	if omoshiroGoMoji.UserID != c.GetUint("currentUserID") {

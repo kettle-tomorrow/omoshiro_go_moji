@@ -7,7 +7,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func AccountCreate(c *gin.Context) {
+type AccountController struct{}
+
+func (AccountController) Create(c *gin.Context) {
 	account := models.Account{}
 	err := c.Bind(&account)
 	if err != nil {
