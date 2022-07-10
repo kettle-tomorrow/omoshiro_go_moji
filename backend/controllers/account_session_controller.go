@@ -21,7 +21,7 @@ func (AccountSessionController) Create(c *gin.Context) {
 	}
 
 	account := models.Account{}
-	account = account.GetAccountByEmail(requestAccount.Email)
+	account = account.GetByEmail(requestAccount.Email)
 	comparePasswordErr := bcrypt.CompareHashAndPassword([]byte(account.Password), []byte(requestAccount.Password))
 	if comparePasswordErr != nil {
 		c.String(http.StatusBadRequest, "login failed2")

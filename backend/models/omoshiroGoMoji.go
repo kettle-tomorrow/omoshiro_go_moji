@@ -13,33 +13,33 @@ type OmoshiroGoMoji struct {
 	UpdatedAt time.Time `gorm:"not null" json:"updated_at"`
 }
 
-func (OmoshiroGoMoji) GetOmoshiroGoMojiList() []OmoshiroGoMoji {
+func (OmoshiroGoMoji) List() []OmoshiroGoMoji {
 	var omoshiroGomojis []OmoshiroGoMoji
 	dbConnection := databases.GetDBConnection()
 	dbConnection.Find(&omoshiroGomojis)
 	return omoshiroGomojis
 }
 
-func (OmoshiroGoMoji) GetOmoshiroGoMoji(id string) OmoshiroGoMoji {
+func (OmoshiroGoMoji) Get(id string) OmoshiroGoMoji {
 	var omoshiroGoMoji OmoshiroGoMoji
 	dbConnection := databases.GetDBConnection()
 	dbConnection.First(&omoshiroGoMoji, id)
 	return omoshiroGoMoji
 }
 
-func (OmoshiroGoMoji) CreateOmoshiroGoMoji(omoshiroGoMoji *OmoshiroGoMoji) error {
+func (OmoshiroGoMoji) Create(omoshiroGoMoji *OmoshiroGoMoji) error {
 	dbConnection := databases.GetDBConnection()
 	dbConnection.Create(omoshiroGoMoji)
 	return nil
 }
 
-func (OmoshiroGoMoji) UpdateOmoshiroGoMoji(omoshiroGoMoji *OmoshiroGoMoji) error {
+func (OmoshiroGoMoji) Update(omoshiroGoMoji *OmoshiroGoMoji) error {
 	dbConnection := databases.GetDBConnection()
 	dbConnection.Save(omoshiroGoMoji)
 	return nil
 }
 
-func (OmoshiroGoMoji) DeleteOmoshiroGoMoji(id string) error {
+func (OmoshiroGoMoji) Delete(id string) error {
 	dbConnection := databases.GetDBConnection()
 	dbConnection.Delete(OmoshiroGoMoji{}, id)
 	return nil

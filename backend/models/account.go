@@ -15,14 +15,14 @@ type Account struct {
 	UpdatedAt time.Time `gorm:"not null" json:"updated_at"`
 }
 
-func (Account) GetAccountByEmail(email string) Account {
+func (Account) GetByEmail(email string) Account {
 	var account Account
 	dbConnection := databases.GetDBConnection()
 	dbConnection.Where("email = ?", email).First(&account)
 	return account
 }
 
-func (Account) CreateAccount(account *Account) error {
+func (Account) Create(account *Account) error {
 	hash, _ := bcrypt.GenerateFromPassword([]byte(account.Password), bcrypt.DefaultCost)
 	account.Password = string(hash)
 	dbConnection := databases.GetDBConnection()

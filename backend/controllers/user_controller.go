@@ -11,7 +11,7 @@ type UserController struct{}
 
 func (UserController) Index(c *gin.Context) {
 	user := models.User{}
-	userList := user.GetUserList()
+	userList := user.List()
 	c.JSONP(http.StatusOK, gin.H{
 		"message": "ok",
 		"data":    userList,

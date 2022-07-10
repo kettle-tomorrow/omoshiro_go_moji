@@ -16,7 +16,7 @@ func (AccountController) Create(c *gin.Context) {
 		c.String(http.StatusBadRequest, "Bad request")
 		return
 	}
-	account.CreateAccount(&account)
+	account.Create(&account)
 	c.JSON(http.StatusCreated, gin.H{
 		"status": "ok",
 		"data":   account,

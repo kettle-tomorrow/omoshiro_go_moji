@@ -12,7 +12,7 @@ type User struct {
 	UpdatedAt time.Time `gorm:"not null" json:"updated_at"`
 }
 
-func (User) GetUserList() []User {
+func (User) List() []User {
 	var users []User
 	dbConnection := databases.GetDBConnection()
 	dbConnection.Find(&users)
