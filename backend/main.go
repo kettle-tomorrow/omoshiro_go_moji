@@ -15,7 +15,7 @@ import (
 )
 
 func main() {
-	databases.Init()
+	databases.Init(&models.User{}, &models.OmoshiroGoMoji{}, &models.Account{})
 	defer databases.Close()
 	router := gin.Default()
 

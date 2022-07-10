@@ -1,15 +1,13 @@
 package databases
 
 import (
-	"omoshiroGoMoji/backend/models"
-
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
 var dbConnection *gorm.DB
 
-func Init() {
+func Init(models ...interface{}) {
 	USER := "root"
 	PASS := "root"
 	PROTOCOL := "tcp(db:3306)"
@@ -20,7 +18,7 @@ func Init() {
 	if err != nil {
 		panic(err.Error())
 	}
-	dbConnection.AutoMigrate(&models.User{}, &models.OmoshiroGoMoji{}, &models.Account{})
+	dbConnection.AutoMigrate(models...)
 }
 
 func GetDBConnection() *gorm.DB {
