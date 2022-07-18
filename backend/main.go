@@ -1,84 +1,58 @@
 package main
 
 import (
-	"encoding/json"
+	"context"
 	"net/http"
 	"omoshiroGoMoji/backend/controllers"
 	"omoshiroGoMoji/backend/databases"
 	"omoshiroGoMoji/backend/models"
 
-	"github.com/gin-contrib/cors"
-	"github.com/gin-contrib/sessions"
-	"github.com/gin-contrib/sessions/cookie"
-	"github.com/gin-gonic/gin"
-	"github.com/koron/go-dproxy"
+	"github.com/go-chi/chi/v5"
 )
 
 func main() {
 	databases.Init(&models.User{}, &models.OmoshiroGoMoji{}, &models.Account{})
 	defer databases.Close()
-	router := gin.Default()
 
-	// CORS
-	router.Use(cors.New(cors.Config{
-		AllowOrigins: []string{"http://localhost:8080"},
-		AllowMethods: []string{"GET", "POST", "DELETE", "PATCH", "PUT", "OPTIONS"},
-		AllowHeaders: []string{"*"},
-	}))
+	router := chi.NewRouter()
 
-	// セッションCookieの設定
-	store := cookie.NewStore([]byte("secret"))
-	router.Use(sessions.Sessions("mysession", store))
+	router.Get("/api/v1/omoshiro_go_moji/list", controllers.OmoshiroGoMojiIndex)
 
-	apiV1 := router.Group("/api/v1")
-
-	accountSessionController := controllers.AccountSessionController{}
-	apiV1.POST("/login", accountSessionController.Create)
-
-	accountController := controllers.AccountController{}
-	apiV1.POST("/account", accountController.Create)
-
-	omoshiroGoMojiController := controllers.OmoshiroGoMojiController{}
-	omoshiroGoMojiRouter := apiV1.Group("/omoshiro_go_moji")
-	omoshiroGoMojiRouter.GET("/list", omoshiroGoMojiController.Index)
-	omoshiroGoMojiRouter.GET("/:id", omoshiroGoMojiController.Show)
-	omoshiroGoMojiRouter.Use(loginCheckMiddleware())
-	omoshiroGoMojiRouter.POST("", omoshiroGoMojiController.Create)
-	omoshiroGoMojiRouter.PATCH("/:id", omoshiroGoMojiController.Update)
-	omoshiroGoMojiRouter.DELETE("/:id", omoshiroGoMojiController.Delete)
-
-	userController := controllers.UserController{}
-	user := apiV1.Group("/user")
-	user.Use(loginCheckMiddleware())
-	user.GET("/list", userController.Index)
-
-	router.GET("/", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"message": "Welcome to おもしろGo文字",
+	router.Route("/api/v1", func(apiRouter chi.Router) {
+		apiRouter.Post("/login", controllers.AccountSessionCreate)
+		apiRouter.Post("/account", controllers.AccountCreate)
+		apiRouter.Route("/omoshiro_go_moji", func(omoshiroGoMojiRouter chi.Router) {
+			omoshiroGoMojiRouter.Get("/list", controllers.OmoshiroGoMojiIndex)
+			omoshiroGoMojiRouter.Get("/{id}", controllers.OmoshiroGoMojiShow)
+			omoshiroGoMojiRouter.Use(loginCheckMiddleware)
+			omoshiroGoMojiRouter.Post("", controllers.OmoshiroGoMojiCreate)
+			omoshiroGoMojiRouter.Patch("/{id}", controllers.OmoshiroGoMojiUpdate)
+			omoshiroGoMojiRouter.Delete("/{id}", controllers.OmoshiroGoMojiDelete)
 		})
+		apiRouter.Get("/user/list", controllers.UserIndex)
 	})
-	router.Run(":3000")
+	router.Get("/", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("Welcome!"))
+	})
+
+	http.ListenAndServe(":3000", router)
 }
 
-func loginCheckMiddleware() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		session := sessions.Default(c)
-		// Json文字列がinterdace型で格納されておりdproxyのライブラリを使用して値を取り出す
-		loginUserJson, getLoginUserErr := dproxy.New(session.Get("loginUser")).String()
+func corsMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", "http://localhost:8080")
+		w.Header().Set("Access-Control-Allow-Headers", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, DELETE, PATCH, PUT, OPTIONS")
+		next.ServeHTTP(w, r)
+	})
+}
 
-		if getLoginUserErr != nil {
-			c.String(http.StatusUnauthorized, "unauthorized1")
-			c.Abort()
+func loginCheckMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		cookie, err := r.Cookie("_cookie")
+		if err == nil {
+			ctx := context.WithValue(r.Context(), "currentUserId", cookie.Value)
+			next.ServeHTTP(w, r.WithContext(ctx))
 		}
-
-		var loginInfo models.Account
-		jsonUnmarshalErr := json.Unmarshal([]byte(loginUserJson), &loginInfo)
-		if jsonUnmarshalErr != nil {
-			c.String(http.StatusUnauthorized, "unauthorized2")
-			c.Abort()
-		}
-
-		c.Set("currentUserID", loginInfo.ID)
-		c.Next()
-	}
+	})
 }

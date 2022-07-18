@@ -1,24 +1,19 @@
 package controllers
 
 import (
+	"encoding/json"
 	"net/http"
 	"omoshiroGoMoji/backend/models"
-
-	"github.com/gin-gonic/gin"
 )
 
-type AccountController struct{}
-
-func (AccountController) Create(c *gin.Context) {
-	account := models.Account{}
-	err := c.Bind(&account)
+func AccountCreate(w http.ResponseWriter, r *http.Request) {
+	account := models.Account{Email: r.PostFormValue("email"), Password: r.PostFormValue("password")}
+	account.Create(&account)
+	accountResponse, err := json.Marshal(account)
 	if err != nil {
-		c.String(http.StatusBadRequest, "Bad request")
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	account.Create(&account)
-	c.JSON(http.StatusCreated, gin.H{
-		"status": "ok",
-		"data":   account,
-	})
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(accountResponse)
 }

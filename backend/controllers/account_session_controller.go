@@ -1,41 +1,30 @@
 package controllers
 
 import (
-	"encoding/json"
 	"net/http"
 	"omoshiroGoMoji/backend/models"
+	"strconv"
 
-	"github.com/gin-contrib/sessions"
-	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
 )
 
-type AccountSessionController struct{}
-
-func (AccountSessionController) Create(c *gin.Context) {
-	requestAccount := models.Account{}
-	bindErr := c.Bind(&requestAccount)
-	if bindErr != nil {
-		c.String(http.StatusBadRequest, "login failed1")
-		return
-	}
-
+func AccountSessionCreate(w http.ResponseWriter, r *http.Request) {
 	account := models.Account{}
-	account = account.GetByEmail(requestAccount.Email)
-	comparePasswordErr := bcrypt.CompareHashAndPassword([]byte(account.Password), []byte(requestAccount.Password))
+	account = account.GetByEmail(r.PostFormValue("email"))
+
+	comparePasswordErr := bcrypt.CompareHashAndPassword([]byte(account.Password), []byte(r.PostFormValue("password")))
 	if comparePasswordErr != nil {
-		c.String(http.StatusBadRequest, "login failed2")
+		http.Error(w, comparePasswordErr.Error(), http.StatusBadRequest)
 		return
 	}
 
-	session := sessions.Default(c)
-	loginUser, jsonMarshalErr := json.Marshal(account)
-	if jsonMarshalErr == nil {
-		session.Set("loginUser", string(loginUser))
-		session.Save()
-		c.Status(http.StatusOK)
-		return
+	cookie := http.Cookie{
+		Name:     "_cookie",
+		Value:    strconv.FormatUint(uint64(account.ID), 10),
+		HttpOnly: true,
 	}
+	http.SetCookie(w, &cookie)
 
-	c.Status(http.StatusInternalServerError)
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(204)
 }

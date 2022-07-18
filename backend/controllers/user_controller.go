@@ -1,19 +1,18 @@
 package controllers
 
 import (
+	"encoding/json"
 	"net/http"
 	"omoshiroGoMoji/backend/models"
-
-	"github.com/gin-gonic/gin"
 )
 
-type UserController struct{}
-
-func (UserController) Index(c *gin.Context) {
+func UserIndex(w http.ResponseWriter, r *http.Request) {
 	user := models.User{}
-	userList := user.List()
-	c.JSONP(http.StatusOK, gin.H{
-		"message": "ok",
-		"data":    userList,
-	})
+	userList, err := json.Marshal(user.List())
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(userList)
 }
